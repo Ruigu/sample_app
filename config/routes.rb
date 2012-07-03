@@ -5,6 +5,10 @@ SampleApp::Application.routes.draw do
 
   get "static_pages/about"
 
+  get "static_pages/contact"
+
+  get "static_pages/carrers"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

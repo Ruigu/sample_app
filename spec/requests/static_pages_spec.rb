@@ -44,4 +44,30 @@ end
   					:text => "Ruby on Rails Tutorial Sample App | About Us" )
   	end
   end
+
+  describe "Contact Page" do
+  	it "should have the h1 'Contact'" do
+  		visit '/static_pages/contact'
+  		page.should have_selector('h1', :text => 'Contact')
+  	end
+
+  	it "should have the title 'Contact'" do
+  		visit '/static_pages/contact'
+  		page.should have_content('title', 
+  					:text => "Ruby on Rails Tutorial Sample App | Contact")
+  	end
+  end
+
+  describe "Carrers Page" do
+  	it "should have h1 'Carrers'" do
+  		visit '/static_pages/carrers'
+  		page.should have_selector('h1', :text => 'Carrers')
+  	end
+
+  	it "should have the title 'Carrers'" do
+  		visit '/static_pages/carrers'
+  		page.should have_selector('title', 
+  					:text => "Ruby on Rails Tutorial Sample App | Carrers")
+  	end
+  end
 end
