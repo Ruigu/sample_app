@@ -1,4 +1,4 @@
-class User
+class Cretenewsers
 	attr_accessor :name, :email 					#create attribute accessors corresponding to a user's name and email
 
 	def initialize(attributes = {}) 				#initialize is a special method in ruby and used as a constructor
