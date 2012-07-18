@@ -19,6 +19,6 @@ class User < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i 															#regular expession(regex) to define format
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false } 		#VALID_EMAIL_REGEX is a ruby constant so its value cant change
-  validates :password, presence: true, length: { minimum: 6 }
-  validates :password_confirmation, presence: true
+  validate :password, length: { minimum: 6 }
+  validate :password_confirmation
 end
