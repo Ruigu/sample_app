@@ -17,8 +17,21 @@ module SessionsHelper
 		@current_user ||= User.find_by_remember_token(cookies[:remember_token]) 											#sets the variable to the user corresponding to the remember token, but only if the variable is undefined thus the find_by_remember_token is called atleast once every time a user visits a page on the site
 	end
 
+	def current_user?(user)
+		user == current_user
+	end
+
 	def sign_out
 		self.current_user = nil
 		cookies.delete(:remember_token)
+	end
+
+	def redirect_back_or(default)
+		redirect_to(session[:return_to] || default)
+		session.delete(:return_to)
+	end
+
+	def store_location
+		session[:return_to] = request.fullpath
 	end
 end

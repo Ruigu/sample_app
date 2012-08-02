@@ -27,10 +27,23 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
+  it { should respond_to(:admin) }
+  it { should respond_to(:authenticate) }
 
   it { should be_valid}				               				#verifying that @user object id valid
+  it { should_not be_admin}
 
   it { should respond_to(:authenticate) }           #require a user object to respond to authenticate
+
+  #test for an admin attribute
+  describe "with admin attribute set to 'true'" do
+    before do
+      @user.save!
+      @user.toggle!(:admin)                               #user toggle! method to flip the admin attribute 4rm false to true
+    end
+
+    it { should be_admin }                                #user should have an admin? boolean method
+  end
 
   #test that user should have name (Name validation)
   describe "when name is not present" do
