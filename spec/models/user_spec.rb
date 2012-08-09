@@ -29,20 +29,22 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:admin) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:microposts) }                           #verifying that a user has micropost attributes
+  it { should respond_to(:feed) }                                 #verifying that a user homepage also shows his feeds and of his followers
 
-  it { should be_valid}				               				#verifying that @user object id valid
+  it { should be_valid}				               				              #verifying that @user object id valid
   it { should_not be_admin}
 
-  it { should respond_to(:authenticate) }           #require a user object to respond to authenticate
+  it { should respond_to(:authenticate) }                         #require a user object to respond to authenticate
 
   #test for an admin attribute
   describe "with admin attribute set to 'true'" do
     before do
       @user.save!
-      @user.toggle!(:admin)                               #user toggle! method to flip the admin attribute 4rm false to true
+      @user.toggle!(:admin)                                       #user toggle! method to flip the admin attribute 4rm false to true
     end
 
-    it { should be_admin }                                #user should have an admin? boolean method
+    it { should be_admin }                                        #user should have an admin? boolean method
   end
 
   #test that user should have name (Name validation)
@@ -67,6 +69,42 @@ describe User do
   describe "when password doesn't match confirmation" do
     before { @user.password_confirmation = "mismatch" }
     it { should_not be_valid }
+  end
+
+  #testing the order of user's microposts
+  describe "micropost associations" do
+
+    before { @user.save }
+    let!(:older_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+    end
+    let!(:newer_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)
+    end
+
+    it "should have the right microposts in the right order" do
+      @user.microposts.should == [newer_micropost, older_micropost]
+    end
+
+    #test that micropost are destroyed when users are
+    it "should destroy associated microposts" do
+      microposts = @user.microposts
+      @user.destroy
+      microposts.each do |micropost|
+        Micropost.find_by_id(micropost.id).should be_nil
+      end
+    end
+
+    #test for the status feed
+    describe "status" do
+      let(:unfollowed_post) do
+        FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
+      end
+
+      its(:feed) { should include(newer_micropost) }
+      its(:feed) { should include(older_micropost) }
+      its(:feed) { should_not include(unfollowed_post) }
+    end
   end
 
   #test to ensure that password_confirmation field is not empty
