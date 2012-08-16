@@ -1,9 +1,17 @@
 SampleApp::Application.routes.draw do
-  resources :users
+  resources :users do
+    member do                                                                       #member method means routes respond to URIs containing user id
+      get :following, :followers                                                    #get helps to arrange for the URIs to respond to GET requests
+    end
+  end
+
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy]
+  resources :relationships, only: [:create, :destroy]
 
   root to: 'static_pages#home'
+
+  match 'users/:id/:username' => 'users#show', :as => "show_users"
 
   match '/signup', to: 'users#new'
 
