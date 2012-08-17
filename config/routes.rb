@@ -11,7 +11,7 @@ SampleApp::Application.routes.draw do
 
   root to: 'static_pages#home'
 
-  match 'users/:id/:username' => 'users#show', :as => "show_users"
+  #match 'users/:username' => 'users#show', :as => "show_users"
 
   match '/signup', to: 'users#new'
 

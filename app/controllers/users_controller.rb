@@ -17,6 +17,7 @@ class UsersController < ApplicationController
     @users = User.paginate(page: params[:page])
   end
 
+  #method handles a user signing up failure and success
   def create
   	@user = User.new(params[:user])
   	if @user.save
